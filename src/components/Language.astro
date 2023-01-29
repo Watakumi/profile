@@ -1,7 +1,20 @@
 ---
 const { skills, uses } = {
-  skills: ["Ruby", "Javascript", "Typescript"],
-  uses: ["Ruby on Rails", "ReactJS", "NextJS", "Deno"],
+  skills: [
+    { name: "Ruby", src: "https://www.ruby-lang.org/ja/" },
+    {
+      name: "JavaScript",
+      src: "https://developer.mozilla.org/ja/docs/Web/JavaScript",
+    },
+    { name: "TypeScript", src: "https://www.typescriptlang.org/" },
+  ],
+
+  uses: [
+    { name: "Ruby on Rails", src: "https://rubyonrails.org/" },
+    { name: "ReactJS", src: "https://ja.reactjs.org/" },
+    { name: "NextJS", src: "https://nextjs.org/" },
+    { name: "Deno", src: "https://deno.land/" },
+  ],
 };
 ---
 
@@ -13,11 +26,13 @@ const { skills, uses } = {
         <>
           <li class='text-xl flex shadow-md p-[0.15rem] rounded-lg hover:bg-gradient-to-r hover:from-[#13005A] hover:via-[#1C82AD]  hover:to-[#03C988]'>
             <a
-              href='https://www.ruby-lang.org/ja/'
+              href={skill.src}
+              target='_blank'
+              rel='noopener noreferrer'
               class='w-full bg-white font-bold p-4 rounded-md'
             >
               <h2 class='inline-block bg-clip-text text-transparent bg-gradient-to-r from-[#13005A] via-[#1C82AD]  to-[#03C988]'>
-                {skill}
+                {skill.name}
               </h2>
             </a>
           </li>
@@ -31,9 +46,14 @@ const { skills, uses } = {
       uses.map((use) => (
         <>
           <li class='text-xl flex shadow-md bg-white p-[0.15rem] rounded-lg transition ease-in-out duration-150 hover:bg-gradient-to-r hover:from-[#13005A] hover:via-[#1C82AD]  hover:to-[#03C988]'>
-            <a href='' class='w-full rounded-md font-bold p-4 bg-white'>
+            <a
+              href={use.src}
+              target='_blank'
+              rel='noopener noreferrer'
+              class='w-full rounded-md font-bold p-4 bg-white'
+            >
               <h2 class='inline-block bg-clip-text text-transparent bg-gradient-to-r from-[#13005A] via-[#1C82AD]  to-[#03C988]'>
-                {use}
+                {use.name}
               </h2>
             </a>
           </li>
