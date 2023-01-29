@@ -1,0 +1,58 @@
+---
+const { skills, uses } = {
+  skills: ["Ruby", "Javascript", "Typescript"],
+  uses: ["Ruby on Rails", "ReactJS", "NextJS", "Deno"],
+};
+---
+
+<div>
+  <h1 class='font-semibold text-3xl mt-4'>Skills</h1>
+  <ul class='language-grid mt-2'>
+    {
+      skills.map((skill) => (
+        <>
+          <li class='text-xl flex shadow-md p-[0.15rem] rounded-lg hover:bg-gradient-to-r hover:from-[#13005A] hover:via-[#1C82AD]  hover:to-[#03C988]'>
+            <a
+              href='https://www.ruby-lang.org/ja/'
+              class='w-full bg-white font-bold p-4 rounded-md'
+            >
+              <h2 class='inline-block bg-clip-text text-transparent bg-gradient-to-r from-[#13005A] via-[#1C82AD]  to-[#03C988]'>
+                {skill}
+              </h2>
+            </a>
+          </li>
+        </>
+      ))
+    }
+  </ul>
+  <h1 class='font-semibold text-3xl mt-4'>Uses</h1>
+  <ul class='language-grid mt-2'>
+    {
+      uses.map((use) => (
+        <>
+          <li class='text-xl flex shadow-md bg-white p-[0.15rem] rounded-lg transition ease-in-out duration-150 hover:bg-gradient-to-r hover:from-[#13005A] hover:via-[#1C82AD]  hover:to-[#03C988]'>
+            <a href='' class='w-full rounded-md font-bold p-4 bg-white'>
+              <h2 class='inline-block bg-clip-text text-transparent bg-gradient-to-r from-[#13005A] via-[#1C82AD]  to-[#03C988]'>
+                {use}
+              </h2>
+            </a>
+          </li>
+        </>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .language-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+    gap: 1rem;
+    padding: 0;
+  }
+
+  .bg-clip-text {
+    background-clip: text;
+    -webkit-background-clip: text;
+  }
+</style>
