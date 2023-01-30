@@ -1,0 +1,40 @@
+---
+import { Icon } from "astro-icon";
+---
+
+<div>
+  <h1 class='font-semibold text-3xl mt-8'>Links</h1>
+  <ul class='w-full flex flex-row justify-center items-center'>
+    <li class='flex w-1/2 justify-center'>
+      <a
+        href='https://github.com/Watakumi'
+        class='w-full flex justify-center'
+        target='_blank'
+        rel='noopener noreferrer'
+      >
+        <Icon name='mdi:github' />
+      </a>
+    </li>
+    <li class='flex w-1/2 justify-center'>
+      <a
+        href='https://twitter.com/Watadayooo__'
+        class='w-full flex justify-center'
+        target='_blank'
+        rel='noopener noreferrer'
+      >
+        <Icon name='mdi:twitter' />
+      </a>
+    </li>
+  </ul>
+</div>
+
+<style>
+  [astro-icon] {
+    width: 48px;
+    height: 48px;
+  }
+
+  a:hover [astro-icon] {
+    color: rgb(var(--accent));
+  }
+</style>
