@@ -24,16 +24,14 @@ const { skills, uses } = {
     {
       skills.map((skill) => (
         <>
-          <li class='text-xl flex shadow-md p-[0.15rem] rounded-lg hover:bg-gradient-to-r hover:from-[#13005A] hover:via-[#1C82AD]  hover:to-[#03C988]'>
+          <li class='text-xl flex shadow-md p-[0.15rem] rounded-lg bg-white bg-gradation-animation'>
             <a
               href={skill.src}
               target='_blank'
               rel='noopener noreferrer'
-              class='w-full bg-white font-bold p-4 rounded-md'
+              class='w-full bg-white font-bold p-4 rounded-md hover:opacity-80'
             >
-              <h2 class='inline-block bg-clip-text text-transparent bg-gradient-to-r from-[#13005A] via-[#1C82AD]  to-[#03C988]'>
-                {skill.name}
-              </h2>
+              <h2 class='text-gradient-animation'>{skill.name}</h2>
             </a>
           </li>
         </>
@@ -45,16 +43,14 @@ const { skills, uses } = {
     {
       uses.map((use) => (
         <>
-          <li class='text-xl flex shadow-md bg-white p-[0.15rem] rounded-lg transition ease-in-out duration-150 hover:bg-gradient-to-r hover:from-[#13005A] hover:via-[#1C82AD]  hover:to-[#03C988]'>
+          <li class='text-xl flex shadow-md p-[0.15rem] rounded-lg bg-white bg-gradation-animation'>
             <a
               href={use.src}
               target='_blank'
               rel='noopener noreferrer'
-              class='w-full rounded-md font-bold p-4 bg-white'
+              class='w-full bg-white font-bold p-4 rounded-md hover:opacity-80'
             >
-              <h2 class='inline-block bg-clip-text text-transparent bg-gradient-to-r from-[#13005A] via-[#1C82AD]  to-[#03C988]'>
-                {use.name}
-              </h2>
+              <h2 class='text-gradient-animation'>{use.name}</h2>
             </a>
           </li>
         </>
@@ -71,8 +67,35 @@ const { skills, uses } = {
     padding: 0;
   }
 
-  .bg-clip-text {
+  .bg-gradation-animation {
+    background-size: 400%;
+    background-position: 100%;
+    background-image: var(--accent-gradient);
+    transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .bg-gradation-animation:is(:hover, :focus-within) {
+    background-position: 0;
+  }
+
+  .text-gradient-animation {
+    --accent-gradient-text: linear-gradient(
+      45deg,
+      rgb(var(--accent)),
+      #1c82ad 30%,
+      #03c988 60%
+    );
+    display: inline-block;
+    color: transparent;
+    background-size: 100%;
+    background-position: 100%;
     background-clip: text;
     -webkit-background-clip: text;
+    background-image: var(--accent-gradient-text);
+    transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .bg-gradation-animation:is(:hover, :focus-within) .text-gradient-animation {
+    color: rgb(var(--accent));
   }
 </style>
