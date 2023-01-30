@@ -1,3 +1,3 @@
 # Watakumi Page
 
-![demo](./public/WatakumiPageMock.png)
+![demo](./public/WatakumiPageMock.jpeg)
