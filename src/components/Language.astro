@@ -31,7 +31,9 @@ const { skills, uses } = {
               rel='noopener noreferrer'
               class='w-full bg-white font-bold p-4 rounded-md hover:opacity-80'
             >
-              <h2 class='text-gradient-animation'>{skill.name}</h2>
+              <h2 class='text-gradient-animation'>
+                {skill.name} <span>&rarr;</span>
+              </h2>
             </a>
           </li>
         </>
@@ -50,7 +52,9 @@ const { skills, uses } = {
               rel='noopener noreferrer'
               class='w-full bg-white font-bold p-4 rounded-md hover:opacity-80'
             >
-              <h2 class='text-gradient-animation'>{use.name}</h2>
+              <h2 class='text-gradient-animation'>
+                {use.name} <span>&rarr;</span>
+              </h2>
             </a>
           </li>
         </>
