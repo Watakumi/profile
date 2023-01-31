@@ -1,40 +1,48 @@
 ---
-import { Icon } from "astro-icon";
+// @ts-ignore
+import { TwitterLogo, GitHubLogo } from "@astropub/icons";
 ---
 
 <div>
   <h1 class='font-semibold text-3xl mt-8'>Links</h1>
-  <ul class='w-full flex flex-row justify-center items-center'>
+  <ul class='w-full flex flex-row gap-4 justify-center items-center'>
     <li class='flex w-1/2 justify-center'>
       <a
         href='https://github.com/Watakumi'
-        class='w-full flex justify-center'
+        class='flex justify-center rounded-full p-4 bg-white shadow-md'
         target='_blank'
         rel='noopener noreferrer'
       >
-        <Icon name='mdi:github' />
+        <TwitterLogo />
       </a>
     </li>
     <li class='flex w-1/2 justify-center'>
       <a
         href='https://twitter.com/Watadayooo__'
-        class='w-full flex justify-center'
+        class='flex justify-center rounded-full p-4 bg-white shadow-md'
         target='_blank'
         rel='noopener noreferrer'
       >
-        <Icon name='mdi:twitter' />
+        <GitHubLogo />
       </a>
     </li>
   </ul>
 </div>
 
 <style>
-  [astro-icon] {
+  a {
+    transition: background-color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  a:hover {
+    background-color: rgb(var(--accent));
+  }
+  svg {
     width: 48px;
     height: 48px;
+    transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  a:hover [astro-icon] {
-    color: rgb(var(--accent));
+  a:hover svg {
+    color: white;
   }
 </style>
