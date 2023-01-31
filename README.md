@@ -2,10 +2,10 @@
 
 Link: https://watakumi.page
 
-Hi! My name is Watakumi.
-Here are the codes of my profile site.
-I used to Astro for creating it.
-I was amazed at how simple and easy it was to make.
+Hi! My name is Watakumi :yum: <br />
+Here are the codes of my profile site. <br />
+I used to Astro for creating it. <br />
+I was amazed at how simple and easy it was to make. <br />
 
 ## About
 
