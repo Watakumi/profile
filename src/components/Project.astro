@@ -12,6 +12,8 @@ const selectStyle = (language: string): string => {
     return "ts-gradient";
   } else if (language === "Ruby") {
     return "ruby-gradient";
+  } else if (language === "Astro") {
+    return "astro-gradient";
   } else {
     return "";
   }
@@ -59,6 +61,14 @@ const style = selectStyle(language);
       #ec4b60 30%,
       white 60%
     );
+
+    --astro-accent: 100, 125, 238;
+    --astro-accent-gradient: linear-gradient(
+      to right,
+      rgb(var(--astro-accent)),
+      #7f53ac 30%,
+      white 60%
+    );
   }
 
   a {
@@ -81,6 +91,10 @@ const style = selectStyle(language);
 
   .ts-gradient {
     background-image: var(--ts-accent-gradient);
+  }
+
+  .astro-gradient {
+    background-image: var(--astro-accent-gradient);
   }
 
   .bg-gradation-animation {
