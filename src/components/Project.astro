@@ -1,0 +1,117 @@
+---
+export type Props = {
+  title: string;
+  description: string;
+  language: string;
+  source: string;
+};
+
+const { title, description, language, source } = Astro.props;
+const selectStyle = (language: string): string => {
+  if (language === "TypeScript") {
+    return "ts-gradient";
+  } else if (language === "Ruby") {
+    return "ruby-gradient";
+  } else {
+    return "";
+  }
+};
+const style = selectStyle(language);
+---
+
+<li
+  class={`flex shadow-md p-1.5 rounded-lg h-full bg-white bg-gradation-animation ${style}`}
+>
+  <a
+    href={source}
+    target='_blank'
+    rel='noopener noreferrer'
+    class='relative flex w-full bg-white font-bold p-4 rounded-md justify-center items-center flex-col min-h-full'
+  >
+    <div class='flex items-center flex-col project-card h-full gap-2'>
+      <h2 class='text-xl'>{title}</h2>
+      <p>
+        {description}
+      </p>
+    </div>
+    <div
+      class='absolute justify-center items-center flex-col project-language z-10'
+    >
+      <h2 class='text-xl'>{language}</h2>
+    </div>
+  </a>
+</li>
+
+<style>
+  :root {
+    --ruby-accent: 162, 6, 6;
+    --ruby-accent-gradient: linear-gradient(
+      to right,
+      rgb(var(--ruby-accent)),
+      #d98324 30%,
+      white 60%
+    );
+
+    --ts-accent: 126, 232, 250;
+    --ts-accent-gradient: linear-gradient(
+      to right,
+      rgb(var(--ts-accent)),
+      #ec4b60 30%,
+      white 60%
+    );
+  }
+
+  a {
+    height: 120px;
+    overflow-y: hidden;
+  }
+
+  p {
+    text-align: center;
+    word-break: break-all;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .ruby-gradient {
+    background-image: var(--ruby-accent-gradient);
+  }
+
+  .ts-gradient {
+    background-image: var(--ts-accent-gradient);
+  }
+
+  .bg-gradation-animation {
+    background-size: 400%;
+    background-position: 98%;
+    transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .bg-gradation-animation:is(:hover, :focus-within) {
+    background-position: 0;
+  }
+
+  .project-language {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  a:hover .project-language {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .project-card {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  a:hover .project-card {
+    visibility: hidden;
+    opacity: 0;
+  }
+</style>
