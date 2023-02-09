@@ -1,12 +1,12 @@
 ---
 export type Props = {
-  title: string;
+  name: string;
   description: string;
   language: string;
-  source: string;
+  src: string;
 };
 
-const { title, description, language, source } = Astro.props;
+const { name, description, language, src } = Astro.props;
 const selectStyle = (language: string): string => {
   if (language === "TypeScript") {
     return "ts-gradient";
@@ -25,13 +25,13 @@ const style = selectStyle(language);
   class={`flex shadow-md p-1.5 rounded-lg h-full bg-white bg-gradation-animation ${style}`}
 >
   <a
-    href={source}
+    href={src}
     target='_blank'
     rel='noopener noreferrer'
     class='relative flex w-full bg-white font-bold p-4 rounded-md justify-center items-center flex-col min-h-full'
   >
     <div class='flex items-center flex-col project-card h-full gap-2'>
-      <h2 class='text-xl'>{title}</h2>
+      <h2 class='text-xl'>{name}</h2>
       <p>
         {description}
       </p>

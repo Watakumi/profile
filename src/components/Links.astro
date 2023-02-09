@@ -1,30 +1,49 @@
 ---
 // @ts-ignore
 import { TwitterLogo, GitHubLogo } from "@astropub/icons";
+
+type Props = {
+  links: {
+    name: string;
+    src: string;
+  }[];
+};
+const { links } = Astro.props;
+
+const githubSrc = links.find((link) => link.name === "Github")?.src;
+const twitterSrc = links.find((link) => link.name === "Twitter")?.src;
 ---
 
 <div>
   <h1 class='font-semibold text-3xl mt-8'>Links</h1>
   <ul class='w-full flex flex-row gap-4 justify-center items-center mt-4'>
     <li class='flex w-1/2 justify-center'>
-      <a
-        href='https://github.com/Watakumi'
-        class='flex justify-center rounded-full p-4 bg-white shadow-md'
-        target='_blank'
-        rel='noopener noreferrer'
-      >
-        <GitHubLogo width='48' height='48' />
-      </a>
+      {
+        githubSrc && (
+          <a
+            href={githubSrc}
+            class='flex justify-center rounded-full p-4 bg-white shadow-md'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            <GitHubLogo width='48' height='48' />
+          </a>
+        )
+      }
     </li>
     <li class='flex w-1/2 justify-center'>
-      <a
-        href='https://twitter.com/Watadayooo__'
-        class='flex justify-center rounded-full p-4 bg-white shadow-md'
-        target='_blank'
-        rel='noopener noreferrer'
-      >
-        <TwitterLogo width='48' height='48' />
-      </a>
+      {
+        twitterSrc && (
+          <a
+            href={twitterSrc}
+            class='flex justify-center rounded-full p-4 bg-white shadow-md'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            <TwitterLogo width='48' height='48' />
+          </a>
+        )
+      }
     </li>
   </ul>
 </div>
