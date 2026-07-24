@@ -1,4 +1,17 @@
 ---
+import { profile } from '../data/profile';
+const year = 2026;
 ---
 
-<div class='mt-8'></div>
+<footer class='mx-auto mt-16 max-w-2xl px-6 pb-10 text-center'>
+  <div
+    class='mx-auto mb-6 h-px w-24 bg-gradient-to-r from-transparent via-ink/20 to-transparent dark:via-white/20'
+  >
+  </div>
+  <p class='text-sm text-ink/60 dark:text-white/50'>
+    Built with <span class='text-brand-gradient font-bold'>Astro</span> ・ Deployed on Cloudflare Pages
+  </p>
+  <p class='mt-1 text-sm text-ink/50 dark:text-white/40'>
+    © {year} {profile.name} — made with 💜 &amp; ☕
+  </p>
+</footer>

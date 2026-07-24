@@ -1,131 +1,72 @@
 ---
-export type Props = {
-  name: string;
-  description: string;
-  language: string;
-  src: string;
-};
+import type { Project } from '../data/profile';
 
-const { name, description, language, src } = Astro.props;
-const selectStyle = (language: string): string => {
-  if (language === "TypeScript") {
-    return "ts-gradient";
-  } else if (language === "Ruby") {
-    return "ruby-gradient";
-  } else if (language === "Astro") {
-    return "astro-gradient";
-  } else {
-    return "";
-  }
-};
-const style = selectStyle(language);
+type Props = Project;
+
+const { name, description, emoji, theme, src } = Astro.props;
+const isLive = src !== '#';
 ---
 
-<li
-  class={`flex shadow-md p-1.5 rounded-lg h-full bg-white bg-gradation-animation ${style}`}
->
+<li class={`grad-${theme} h-full`}>
   <a
     href={src}
-    target='_blank'
-    rel='noopener noreferrer'
-    class='relative flex w-full bg-white font-bold p-4 rounded-md justify-center items-center flex-col min-h-full'
+    target={isLive ? '_blank' : undefined}
+    rel={isLive ? 'noopener noreferrer' : undefined}
+    aria-disabled={!isLive}
+    class='card group relative flex h-full flex-col gap-3 rounded-3xl border border-white/70 bg-white/85 p-5 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl dark:border-white/10 dark:bg-white/10'
   >
-    <div class='flex items-center flex-col project-card h-full gap-2'>
-      <h2 class='text-xl'>{name}</h2>
-      <p>
-        {description}
-      </p>
+    <div class='flex items-start justify-between gap-2'>
+      <span
+        class='grid h-12 w-12 place-items-center rounded-2xl text-2xl shadow-inner'
+        style='background:linear-gradient(135deg, color-mix(in srgb, var(--g1) 22%, white), color-mix(in srgb, var(--g2) 22%, white))'
+        aria-hidden='true'>{emoji}</span>
+      <span
+        class={`rounded-full px-2.5 py-1 text-xs font-bold ${
+          isLive
+            ? 'bg-green/15 text-emerald-700 dark:text-emerald-300'
+            : 'bg-ink/10 text-ink/50 dark:bg-white/10 dark:text-white/40'
+        }`}
+      >
+        {isLive ? 'LIVE' : 'Coming soon'}
+      </span>
     </div>
-    <div
-      class='absolute justify-center items-center flex-col project-language z-10'
+
+    <h3
+      class='text-lg font-extrabold text-ink transition-colors group-hover:text-transparent group-hover:[background-image:linear-gradient(100deg,var(--g1),var(--g2))] group-hover:[background-clip:text] group-hover:[-webkit-background-clip:text] dark:text-white'
     >
-      <h2 class='text-xl'>{language}</h2>
-    </div>
+      {name}
+    </h3>
+    <p class='text-sm leading-relaxed text-ink/70 dark:text-white/60'>
+      {description}
+    </p>
+
+    <span
+      class='mt-auto inline-flex items-center gap-1 text-sm font-bold text-ink/50 transition-all group-hover:gap-2 group-hover:text-ink dark:text-white/50 dark:group-hover:text-white'
+    >
+      {isLive ? '見てみる' : '準備中'}
+      {isLive && <span class='transition-transform group-hover:translate-x-1'>→</span>}
+    </span>
   </a>
 </li>
 
 <style>
-  :root {
-    --ruby-accent: 162, 6, 6;
-    --ruby-accent-gradient: linear-gradient(
-      to right,
-      rgb(var(--ruby-accent)),
-      #d98324 30%,
-      white 60%
-    );
-
-    --ts-accent: 126, 232, 250;
-    --ts-accent-gradient: linear-gradient(
-      to right,
-      rgb(var(--ts-accent)),
-      #ec4b60 30%,
-      white 60%
-    );
-
-    --astro-accent: 100, 125, 238;
-    --astro-accent-gradient: linear-gradient(
-      to right,
-      rgb(var(--astro-accent)),
-      #7f53ac 30%,
-      white 60%
-    );
-  }
-
-  a {
-    height: 120px;
-    overflow-y: hidden;
-  }
-
-  p {
-    text-align: center;
-    word-break: break-all;
+  .card {
+    position: relative;
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
   }
-
-  .ruby-gradient {
-    background-image: var(--ruby-accent-gradient);
+  /* 上辺のグラデーションライン */
+  .card::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--g1), var(--g2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
-
-  .ts-gradient {
-    background-image: var(--ts-accent-gradient);
-  }
-
-  .astro-gradient {
-    background-image: var(--astro-accent-gradient);
-  }
-
-  .bg-gradation-animation {
-    background-size: 400%;
-    background-position: 98%;
-    transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .bg-gradation-animation:is(:hover, :focus-within) {
-    background-position: 0;
-  }
-
-  .project-language {
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  a:hover .project-language {
-    visibility: visible;
-    opacity: 1;
-  }
-
-  .project-card {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  a:hover .project-card {
-    visibility: hidden;
-    opacity: 0;
+  .card:hover::before {
+    transform: scaleX(1);
   }
 </style>

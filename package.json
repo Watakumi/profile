@@ -1,21 +1,18 @@
 {
-  "name": "@example/basics",
+  "name": "watakumi-page",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "deno run --allow-net --allow-read --allow-env ./dist/server/entry.mjs",
+    "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/deno": "^4.0.0",
-    "@astrojs/tailwind": "^3.0.0",
-    "@astropub/icons": "^0.2.0",
-    "astro": "^2.0.2",
-    "astro-icon": "^0.8.0",
-    "tailwindcss": "^3.2.4"
+    "astro": "^5.13.0",
+    "@tailwindcss/vite": "^4.1.0",
+    "tailwindcss": "^4.1.0"
   }
 }

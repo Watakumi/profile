@@ -1,20 +1,21 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title='404 not found.'>
-  <main>
-    <div class='flex justify-center'>
-      <h1 class='flex flex-col mt-[20vh] items-center'>
-        <span class='text-9xl font-bold'>404</span>
-        <span class='text-6xl font-medium'>NOT FOUND</span>
-      </h1>
+<Layout title='404 - ページが見つかりません'>
+  <main class='grid min-h-[80dvh] place-items-center px-6 text-center'>
+    <div class='rise'>
+      <p class='text-8xl font-black text-brand-flow sm:text-9xl'>404</p>
+      <p class='mt-2 text-2xl font-extrabold'>ページが見つかりません 🧭</p>
+      <p class='mt-3 text-ink/60 dark:text-white/60'>
+        探しているページは、どこかへ旅立ってしまったようです。
+      </p>
+      <a
+        href='/'
+        class='mt-8 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[#7c3aed] via-[#1c82ad] to-[#03c988] px-6 py-3 font-bold text-white shadow-lg transition-transform hover:-translate-y-0.5'
+      >
+        ← トップに戻る
+      </a>
     </div>
   </main>
 </Layout>
-
-<style>
-  body {
-    height: 100vh;
-  }
-</style>

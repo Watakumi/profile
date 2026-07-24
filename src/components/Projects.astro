@@ -1,41 +1,19 @@
 ---
-import Project from "./Project.astro";
+import Project from './Project.astro';
+import type { Project as ProjectType } from '../data/profile';
 
 export type Props = {
-  projects: {
-    name: string;
-    description: string;
-    language: string;
-    src: string;
-  }[];
+  projects: ProjectType[];
 };
 
 const { projects } = Astro.props;
 ---
 
-<div class='mt-8'>
-  <h1 class='font-semibold text-3xl'>Projects</h1>
-  <ul class='mt-4'>
-    {
-      projects.map((project) => {
-        const { name, description, language, src } = project;
-        return (
-          <Project
-            name={name}
-            description={description}
-            language={language}
-            src={src}
-          />
-        );
-      })
-    }
+<section class='mt-12 rise' style='animation-delay: 0.3s'>
+  <h2 class='flex items-center gap-2 text-2xl font-extrabold'>
+    <span aria-hidden='true'>🚀</span>Projects
+  </h2>
+  <ul class='mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2'>
+    {projects.map((project) => <Project {...project} />)}
   </ul>
-</div>
-
-<style>
-  ul {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-    gap: 1rem;
-  }
-</style>
+</section>

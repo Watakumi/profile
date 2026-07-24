@@ -1,0 +1,37 @@
+---
+import { career } from '../data/profile';
+---
+
+<section class='mt-12 rise' style='animation-delay: 0.15s'>
+  <h2 class='flex items-center gap-2 text-2xl font-extrabold'>
+    <span aria-hidden='true'>🗂️</span>Career
+  </h2>
+
+  <ol class='mt-5 space-y-4 border-l-2 border-dashed border-ink/15 pl-6 dark:border-white/15'>
+    {
+      career.map((c) => (
+        <li class='relative'>
+          <span
+            class='absolute -left-[1.72rem] top-1.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-gradient-to-br from-[#7c3aed] to-[#03c988] shadow dark:border-[#0c0a1f]'
+            aria-hidden='true'
+          />
+          <div
+            class='rounded-2xl border border-white/70 bg-white/80 p-4 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md dark:border-white/10 dark:bg-white/10'
+          >
+            <div class='flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1'>
+              <p class='font-extrabold text-ink dark:text-white'>{c.company}</p>
+              <span class='text-sm font-bold text-ink/50 dark:text-white/50'>{c.period}</span>
+            </div>
+            <p class='mt-1 text-sm font-semibold text-brand-gradient'>{c.role}</p>
+            {c.product && (
+              <p class='mt-2 inline-flex items-center gap-1.5 rounded-full bg-ink/5 px-2.5 py-1 text-xs font-medium text-ink/70 dark:bg-white/10 dark:text-white/60'>
+                <span aria-hidden='true'>📦</span>
+                {c.product}
+              </p>
+            )}
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>

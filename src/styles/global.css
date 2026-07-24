@@ -1,0 +1,137 @@
+@import 'tailwindcss';
+
+/* ---- デザイントークン（Tailwind 4 は CSS で設定） ---- */
+@theme {
+  --font-sans: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', system-ui,
+    -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --color-navy: #13005a;
+  --color-blue: #1c82ad;
+  --color-green: #03c988;
+
+  --color-ink: #14103a;
+  --color-cream: #fdfbff;
+}
+
+/* ---- ベース ---- */
+html {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  scroll-behavior: smooth;
+  background-color: #f4f1ff;
+}
+
+body {
+  min-height: 100dvh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* カラフルなオーロラ背景（動く光のにじみ） */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -20%;
+  z-index: -2;
+  background:
+    radial-gradient(38% 42% at 12% 18%, rgba(124, 58, 237, 0.35), transparent 60%),
+    radial-gradient(34% 38% at 88% 12%, rgba(3, 201, 136, 0.32), transparent 60%),
+    radial-gradient(40% 44% at 78% 88%, rgba(28, 130, 173, 0.30), transparent 60%),
+    radial-gradient(36% 40% at 20% 82%, rgba(236, 72, 153, 0.26), transparent 60%);
+  filter: blur(10px) saturate(1.1);
+  animation: drift 22s ease-in-out infinite alternate;
+}
+
+/* うっすらしたドット模様 */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(rgba(20, 16, 58, 0.05) 1px, transparent 1px);
+  background-size: 22px 22px;
+  pointer-events: none;
+}
+
+@keyframes drift {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate3d(2%, -2%, 0) rotate(4deg) scale(1.06); }
+  100% { transform: translate3d(-2%, 1%, 0) rotate(-3deg) scale(1.03); }
+}
+
+/* テキストにかけるブランドグラデーション */
+.text-brand-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-navy),
+    var(--color-blue) 45%,
+    var(--color-green) 90%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* きらっと流れるグラデーション（ヒーロー名） */
+.text-brand-flow {
+  background-image: linear-gradient(
+    100deg,
+    #7c3aed,
+    var(--color-blue) 30%,
+    var(--color-green) 55%,
+    #ec4899 80%,
+    #7c3aed
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: flow 8s linear infinite;
+}
+
+@keyframes flow {
+  to { background-position: 250% 50%; }
+}
+
+/* ふわっと登場 */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.rise {
+  opacity: 0;
+  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* プロジェクトカードのグラデーション枠テーマ */
+.grad-ruby { --g1: #e11d48; --g2: #f97316; }
+.grad-astro { --g1: #7c3aed; --g2: #ec4899; }
+.grad-ts { --g1: #2563eb; --g2: #22d3ee; }
+.grad-react { --g1: #06b6d4; --g2: #14b8a6; }
+.grad-sky { --g1: #0ea5e9; --g2: #6366f1; }
+.grad-sun { --g1: #f59e0b; --g2: #ef4444; }
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  .text-brand-flow,
+  .rise {
+    animation: none;
+  }
+  .rise { opacity: 1; }
+}
+
+/* ---- ダークモード ---- */
+@media (prefers-color-scheme: dark) {
+  html {
+    color: #ece9ff;
+    background-color: #0c0a1f;
+  }
+  body::after {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  }
+  /* 濃紺始まりだと暗くて読みにくいので、暗所では明るいグラデーションに差し替え */
+  .text-brand-gradient {
+    background-image: linear-gradient(100deg, #a78bfa, #38bdf8 45%, #34d399 90%);
+  }
+}

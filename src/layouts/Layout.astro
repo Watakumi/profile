@@ -1,57 +1,35 @@
 ---
+import '../styles/global.css';
+
 export interface Props {
   title: string;
+  description?: string;
 }
 
-const { title } = Astro.props;
+const {
+  title,
+  description = 'Watakumi のプロフィールページ。ブラウザで完結する小さくて楽しい個人アプリを量産中。',
+} = Astro.props;
 ---
 
-<!DOCTYPE html>
-<html lang='en'>
+<!doctype html>
+<html lang='ja'>
   <head>
     <meta charset='UTF-8' />
-    <meta name='viewport' content='width=device-width' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
     <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
     <meta name='generator' content={Astro.generator} />
-    <meta name='description' content="Watakumi's Profile Page" />
+    <meta name='description' content={description} />
+    <meta name='theme-color' content='#7c3aed' />
     <title>{title}</title>
+    <meta property='og:type' content='website' />
     <meta property='og:title' content='Watakumi Page' />
-    <meta property='og:description' content='My Profile Page is Here.' />
+    <meta property='og:description' content={description} />
+    <meta property='og:url' content='https://watakumi.page' />
     <meta property='og:image' content='https://watakumi.page/ogp.png' />
+    <meta name='twitter:card' content='summary_large_image' />
   </head>
   <body>
     <slot />
   </body>
 </html>
-<style is:global>
-  :root {
-    --accent: 20, 0, 92;
-    --accent-gradient: linear-gradient(
-      to right,
-      rgb(var(--accent)),
-      #03c988 30%,
-      white 60%
-    );
-  }
-  html {
-    font-family: system-ui, sans-serif;
-    background-color: #f6f6f6;
-  }
-
-  body {
-    background-size: contain;
-    background-image: url("../../public/WatakumiPageBG.png");
-  }
-  code {
-    font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-      DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-  }
-
-  h1 {
-    color: #111;
-  }
-
-  h2 {
-    color: #222;
-  }
-</style>

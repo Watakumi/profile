@@ -1,25 +1,16 @@
 ---
+import { profile } from '../data/profile';
 ---
 
-<div>
-  <h1 class='text-5xl font-bold'>
-    Welcome to <br />
-    <span
-      class='p-1 inline-block bg-clip-text text-transparent bg-gradient-to-r from-[#13005A] via-[#1C82AD] to-[#03C988]'
-    >
-      Watakumi Page
-    </span>
+<header class='rise'>
+  <h1 class='text-5xl font-black leading-[1.05] tracking-tight sm:text-6xl'>
+    Welcome to<br />
+    <span class='text-brand-flow'>{profile.name} Page</span>
+    <span class='inline-block origin-bottom animate-pulse'>👋</span>
   </h1>
-  <p class='pt-2'>
-    I'm a <span class='font-bold text-[#13005A]'>Ruby</span> Developer
-    <br />
-    <strong>I wanna develop simple, fun apps!</strong>
-  </p>
-</div>
 
-<style>
-  .bg-clip-text {
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
-</style>
+  <p class='mt-5 text-lg leading-relaxed text-ink/80 dark:text-white/70'>
+    I'm a <span class='font-bold text-brand-gradient'>{profile.role}</span>.<br />
+    <strong class='font-bold'>{profile.tagline}</strong>
+  </p>
+</header>

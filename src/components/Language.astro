@@ -1,100 +1,83 @@
 ---
+import type { SkillGroup } from '../data/profile';
+
 type Props = {
-  skills: {
-    name: string;
-    src: string;
-  }[];
-  uses: {
-    name: string;
-    src: string;
-  }[];
+  groups: SkillGroup[];
 };
 
-const { skills, uses } = Astro.props;
+const { groups } = Astro.props;
 ---
 
-<div>
-  <h1 class='font-semibold text-3xl mt-8'>Skills</h1>
-  <ul class='language-grid mt-2'>
-    {
-      skills.map((skill) => (
-        <>
-          <li class='text-xl flex shadow-md p-[0.15rem] rounded-lg bg-white bg-gradation-animation'>
-            <a
-              href={skill.src}
-              target='_blank'
-              rel='noopener noreferrer'
-              class='w-full bg-white font-bold p-4 rounded-md hover:opacity-80'
-            >
-              <h2 class='text-gradient-animation'>
-                {skill.name} <span>&rarr;</span>
-              </h2>
-            </a>
-          </li>
-        </>
-      ))
-    }
-  </ul>
-  <h1 class='font-semibold text-3xl mt-8'>Uses</h1>
-  <ul class='language-grid mt-2'>
-    {
-      uses.map((use) => (
-        <>
-          <li class='text-xl flex shadow-md p-[0.15rem] rounded-lg bg-white bg-gradation-animation'>
-            <a
-              href={use.src}
-              target='_blank'
-              rel='noopener noreferrer'
-              class='w-full bg-white font-bold p-4 rounded-md hover:opacity-80'
-            >
-              <h2 class='text-gradient-animation'>
-                {use.name} <span>&rarr;</span>
-              </h2>
-            </a>
-          </li>
-        </>
-      ))
-    }
-  </ul>
-</div>
+<section class='mt-12 rise' style='animation-delay: 0.1s'>
+  <h2 class='flex items-center gap-2 text-2xl font-extrabold'>
+    <span aria-hidden='true'>🧰</span>Skills
+  </h2>
+  {
+    groups.map((group) => (
+      <div class='mt-6'>
+        <h3 class='flex items-center gap-2 text-sm font-bold tracking-wide text-ink/60 uppercase dark:text-white/50'>
+          <span aria-hidden='true'>{group.emoji}</span>
+          {group.label}
+        </h3>
+        <ul class='mt-3 flex flex-wrap gap-2.5'>
+          {group.items.map((item) => {
+            const inner = (
+              <>
+                <span class='h-2.5 w-2.5 rounded-full' style='background:var(--dot)' />
+                {item.name}
+              </>
+            );
+            const cls =
+              'chip inline-flex items-center gap-2 rounded-2xl border border-white/70 bg-white/80 px-3.5 py-2 text-sm font-bold text-ink shadow-sm backdrop-blur transition-all duration-300 dark:border-white/10 dark:bg-white/10 dark:text-white';
+            return (
+              <li>
+                {item.src ? (
+                  <a
+                    href={item.src}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    class={`${cls} group hover:-translate-y-1 hover:shadow-lg`}
+                    style={`--dot:${group.color}`}
+                  >
+                    {inner}
+                    <span class='text-ink/40 transition-transform duration-300 group-hover:translate-x-0.5 dark:text-white/40'>
+                      →
+                    </span>
+                  </a>
+                ) : (
+                  <span class={cls} style={`--dot:${group.color}`}>
+                    {inner}
+                  </span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))
+  }
+</section>
 
 <style>
-  .language-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-    gap: 1rem;
-    padding: 0;
+  .chip {
+    position: relative;
   }
-
-  .bg-gradation-animation {
-    background-size: 400%;
-    background-position: 98%;
-    background-image: var(--accent-gradient);
-    transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  .chip::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 1rem;
+    padding: 1.5px;
+    background: linear-gradient(120deg, var(--dot), transparent 70%);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
-
-  .bg-gradation-animation:is(:hover, :focus-within) {
-    background-position: 0;
-  }
-
-  .text-gradient-animation {
-    --accent-gradient-text: linear-gradient(
-      45deg,
-      rgb(var(--accent)),
-      #1c82ad 30%,
-      #03c988 60%
-    );
-    display: inline-block;
-    color: transparent;
-    background-size: 100%;
-    background-position: 100%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    background-image: var(--accent-gradient-text);
-    transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .bg-gradation-animation:is(:hover, :focus-within) .text-gradient-animation {
-    color: rgb(var(--accent));
+  .chip:hover::after {
+    opacity: 1;
   }
 </style>

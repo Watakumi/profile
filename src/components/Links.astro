@@ -1,67 +1,46 @@
 ---
-// @ts-ignore
-import { TwitterLogo, GitHubLogo } from "@astropub/icons";
+import type { Link } from '../data/profile';
 
 type Props = {
-  links: {
-    name: string;
-    src: string;
-  }[];
+  links: Link[];
 };
 const { links } = Astro.props;
 
-const githubSrc = links.find((link) => link.name === "Github")?.src;
-const twitterSrc = links.find((link) => link.name === "Twitter")?.src;
+// name をキーにインラインSVGパスを選ぶ（外部アイコン依存を撤去）
+const iconPaths: Record<string, string> = {
+  GitHub:
+    'M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z',
+  X: 'M18.9 1.8h3.68l-8.04 9.19L24 22.2h-7.4l-5.8-7.58-6.64 7.58H.48l8.6-9.83L0 1.8h7.59l5.24 6.93L18.9 1.8Zm-1.29 18.2h2.04L6.48 3.9H4.29l13.32 16.1Z',
+};
 ---
 
-<div>
-  <h1 class='font-semibold text-3xl mt-8'>Links</h1>
-  <ul class='w-full flex flex-row gap-4 justify-center items-center mt-4'>
-    <li class='flex w-1/2 justify-center'>
-      {
-        githubSrc && (
+<section class='mt-12 rise' style='animation-delay: 0.2s'>
+  <h2 class='flex items-center gap-2 text-2xl font-extrabold'>
+    <span aria-hidden='true'>🔗</span>Links
+  </h2>
+  <ul class='mt-4 flex flex-wrap gap-4'>
+    {
+      links.map((link) => (
+        <li>
           <a
-            href={githubSrc}
-            class='flex justify-center rounded-full p-4 bg-white shadow-md'
+            href={link.src}
+            aria-label={link.name}
             target='_blank'
             rel='noopener noreferrer'
+            class='group relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border border-white/70 bg-white/80 text-ink shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:text-white hover:shadow-lg dark:border-white/10 dark:bg-white/10 dark:text-white'
           >
-            <GitHubLogo width='48' height='48' />
+            <span class='absolute inset-0 -z-0 translate-y-full bg-gradient-to-br from-[#7c3aed] via-[#1c82ad] to-[#03c988] transition-transform duration-300 group-hover:translate-y-0' />
+            <svg
+              class='relative z-10 h-6 w-6'
+              viewBox='0 0 24 24'
+              fill='currentColor'
+              aria-hidden='true'
+            >
+              <path d={iconPaths[link.name] ?? iconPaths.GitHub} />
+            </svg>
           </a>
-        )
-      }
-    </li>
-    <li class='flex w-1/2 justify-center'>
-      {
-        twitterSrc && (
-          <a
-            href={twitterSrc}
-            class='flex justify-center rounded-full p-4 bg-white shadow-md'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            <TwitterLogo width='48' height='48' />
-          </a>
-        )
-      }
-    </li>
+        </li>
+      ))
+    }
   </ul>
-</div>
-
-<style>
-  a {
-    transition: background-color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  a:hover {
-    background-color: rgb(var(--accent));
-  }
-  svg {
-    width: 48px;
-    height: 48px;
-    transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  a:hover svg {
-    color: white;
-  }
-</style>
+</section>

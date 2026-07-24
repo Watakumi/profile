@@ -1,14 +1,10 @@
 import { defineConfig } from 'astro/config';
-
-// https://astro.build/config
-import tailwind from "@astrojs/tailwind";
-
-// https://astro.build/config
-import deno from "@astrojs/deno";
+import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind()],
-  output: "server",
-  adapter: deno()
+  site: 'https://watakumi.page',
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });
