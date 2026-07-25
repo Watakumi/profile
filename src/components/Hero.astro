@@ -2,14 +2,26 @@
 import { profile } from '../data/profile';
 ---
 
-<header class='rise'>
-  <h1 class='text-5xl font-black leading-[1.05] tracking-tight sm:text-6xl'>
+<header class='relative rise'>
+  <div
+    class='bob absolute -top-6 -right-4 z-0 rounded-full bg-gradient-to-br from-[#7c3aed] via-[#1c82ad] to-[#03c988] p-1 shadow-xl sm:-top-8 sm:-right-8'
+  >
+    <img
+      src='/avatar.png'
+      alt={`${profile.name} のアイコン`}
+      width='288'
+      height='288'
+      class='block h-48 w-48 rounded-full bg-white object-contain sm:h-72 sm:w-72'
+    />
+  </div>
+
+  <h1 class='relative z-10 pt-16 text-5xl font-black leading-[1.05] tracking-tight sm:pt-20 sm:text-6xl'>
     Welcome to<br />
     <span class='text-brand-flow'>{profile.name} Page</span>
     <span class='inline-block origin-bottom animate-pulse'>👋</span>
   </h1>
 
-  <p class='mt-5 text-lg leading-relaxed text-ink/80 dark:text-white/70'>
+  <p class='relative z-10 mt-5 text-lg leading-relaxed text-ink/80 dark:text-white/70'>
     I'm a <span class='font-bold text-brand-gradient'>{profile.role}</span>.<br />
     <strong class='font-bold'>{profile.tagline}</strong>
   </p>
