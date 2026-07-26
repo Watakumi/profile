@@ -4,14 +4,17 @@ import { profile } from '../data/profile';
 
 <header class='relative rise'>
   <div
-    class='bob absolute -top-6 -right-4 z-0 rounded-full bg-gradient-to-br from-[#7c3aed] via-[#1c82ad] to-[#03c988] p-1 shadow-xl sm:-top-8 sm:-right-8'
+    id='hero-avatar'
+    title='クリックしてみて'
+    class='bob absolute -top-6 -right-4 z-0 cursor-pointer rounded-full bg-gradient-to-br from-[#7c3aed] via-[#1c82ad] to-[#03c988] p-1 shadow-xl transition-transform active:scale-95 sm:-top-8 sm:-right-8'
   >
     <img
       src='/avatar.png'
       alt={`${profile.name} のアイコン`}
       width='288'
       height='288'
-      class='block h-48 w-48 rounded-full bg-white object-contain sm:h-72 sm:w-72'
+      class='block h-48 w-48 rounded-full bg-white object-contain select-none sm:h-72 sm:w-72'
+      draggable='false'
     />
   </div>
 
@@ -26,3 +29,39 @@ import { profile } from '../data/profile';
     <strong class='font-bold'>{profile.tagline}</strong>
   </p>
 </header>
+
+<script>
+  // 走るキャラのイースターエッグ：アバタークリックで1体、隠しコマンドで大量発生
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function spawnRunner(delay = 0) {
+    if (reduceMotion) return;
+    window.setTimeout(() => {
+      const runner = document.createElement('div');
+      runner.className = 'runner';
+      runner.style.bottom = `${6 + Math.random() * 34}vh`;
+      runner.style.animationDuration = `${2.2 + Math.random() * 0.8}s`;
+      runner.innerHTML =
+        '<div class="runner-inner"><img src="/avatar.png" alt="" aria-hidden="true" /></div>';
+      runner.addEventListener('animationend', () => runner.remove());
+      document.body.appendChild(runner);
+    }, delay);
+  }
+
+  document.getElementById('hero-avatar')?.addEventListener('click', () => spawnRunner());
+
+  // Konami コマンドで一斉に走らせる
+  const konami = [
+    'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+    'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a',
+  ];
+  let pos = 0;
+  window.addEventListener('keydown', (e) => {
+    const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    pos = key === konami[pos] ? pos + 1 : key === konami[0] ? 1 : 0;
+    if (pos === konami.length) {
+      pos = 0;
+      for (let i = 0; i < 10; i++) spawnRunner(i * 200);
+    }
+  });
+</script>

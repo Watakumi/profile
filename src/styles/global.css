@@ -120,6 +120,41 @@ body::after {
   animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+/* 走るキャラのイースターエッグ（アバタークリック / 隠しコマンドで発火） */
+@keyframes run-across {
+  from { transform: translateX(calc(100vw + 140px)); }
+  to { transform: translateX(-180px); }
+}
+@keyframes run-bob {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-16px) rotate(5deg); }
+}
+.runner {
+  position: fixed;
+  left: 0;
+  bottom: 8vh;
+  z-index: 60;
+  pointer-events: none;
+  animation: run-across 2.6s linear forwards;
+}
+.runner-inner {
+  width: 76px;
+  height: 76px;
+  border-radius: 9999px;
+  padding: 4px;
+  background: linear-gradient(135deg, #7c3aed, #1c82ad, #03c988);
+  box-shadow: 0 12px 24px rgba(12, 10, 31, 0.28);
+  animation: run-bob 0.4s ease-in-out infinite;
+}
+.runner-inner img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  background: #fff;
+  object-fit: contain;
+}
+
 /* プロジェクトカードのグラデーション枠テーマ */
 .grad-ruby { --g1: #e11d48; --g2: #f97316; }
 .grad-astro { --g1: #7c3aed; --g2: #ec4899; }

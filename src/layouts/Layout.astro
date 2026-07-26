@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { profile, links } from '../data/profile';
 
 export interface Props {
   title: string;
@@ -10,6 +11,18 @@ const {
   title,
   description = 'Watakumi のプロフィールページ。ブラウザで完結する小さくて楽しい個人アプリを量産中。',
 } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  url: 'https://watakumi.page',
+  jobTitle: profile.role,
+  image: 'https://watakumi.page/avatar.png',
+  sameAs: links.map((l) => l.src),
+};
 ---
 
 <!doctype html>
@@ -22,13 +35,18 @@ const {
     <meta name='generator' content={Astro.generator} />
     <meta name='description' content={description} />
     <meta name='theme-color' content='#7c3aed' />
+    <link rel='canonical' href={canonical} />
     <title>{title}</title>
     <meta property='og:type' content='website' />
     <meta property='og:title' content='Watakumi Page' />
     <meta property='og:description' content={description} />
     <meta property='og:url' content='https://watakumi.page' />
     <meta property='og:image' content='https://watakumi.page/ogp.png' />
+    <meta property='og:image:width' content='1200' />
+    <meta property='og:image:height' content='630' />
     <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:image' content='https://watakumi.page/ogp.png' />
+    <script type='application/ld+json' set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
     <slot />

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://watakumi.page/sitemap-index.xml
