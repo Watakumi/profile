@@ -139,6 +139,13 @@ export const career: CareerEntry[] = [
 // "#" のものは公開後に URL を差し替えてください。
 export const projects: Project[] = [
   {
+    name: 'Building AI Agents',
+    description: 'AIエージェントの設計・実装・運用を一冊にまとめた日本語の教科書。全13章、コードはPythonとTypeScript。',
+    emoji: '📘',
+    theme: 'astro',
+    src: 'https://book.watakumi.page/',
+  },
+  {
     name: 'パケる',
     description: '手持ちの写真を、おもちゃのブリスターパックやお菓子パウチ風のパッケージ画像に。',
     emoji: '📦',
