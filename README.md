@@ -17,6 +17,10 @@ Digital business card 💳 — https://me.watakumi.page
 `src/pages/index.astro` が既に `/` を占有しているため、名刺をサブドメインの `/` に
 置くには `srcDir` を分けるしかありません（Astro のルーティングはファイルシステム固定のため）。
 
+> 名刺まわりの設計判断・**触ると壊れる箇所**・検証手順は
+> [`docs/business-card.md`](./docs/business-card.md) にまとめています。
+> 名刺の CSS や vCard を触る前に一読してください。
+
 ## Stack
 
 - [Astro 5](https://astro.build/) — 静的サイト生成（`output: static`）
