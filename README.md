@@ -50,20 +50,36 @@ npm run build:all   # 両方
 
 npm run preview       # ビルド結果をプレビュー
 npm run preview:card
+
+# 名刺を Workers ランタイム（workerd）で確認する
+npx wrangler dev -c wrangler.card.jsonc
 ```
 
-## デプロイ（Cloudflare Pages）
+## デプロイ
 
-Git連携で自動デプロイ。**同じリポジトリに Pages プロジェクトを2つ**つないでいます。
+2つのサイトで**デプロイ方式が異なります**。Cloudflare が新規プロジェクトを
+Workers に寄せ、ダッシュボードから Pages の作成導線が無くなったためです。
+本サイトは既存の Pages プロジェクトをそのまま使い続けています。
 
 | | 本サイト | 名刺 |
 | --- | --- | --- |
-| Custom domain | `watakumi.page` | `me.watakumi.page` |
+| 方式 | Cloudflare **Pages**（既存） | Cloudflare **Workers**（静的アセット） |
+| ドメイン | `watakumi.page` | `me.watakumi.page` |
 | Build command | `npm run build` | `npm run build:card` |
-| Build output directory | `dist` | `dist-card` |
-| Root directory | （空） | （空） |
-| Framework preset | — | **None**（Astro を選ぶと `npm run build` / `dist` が強制される） |
+| 出力 | `dist` | `dist-card` |
+| Deploy command | —（Pages が自動） | `npx wrangler deploy -c wrangler.card.jsonc` |
 | 環境変数 | — | `NODE_VERSION=22` |
 
-名刺側は静的ビルドのため endpoint のレスポンスヘッダが失われます。
-`.vcf` の `Content-Type` は [`public-card/_headers`](./public-card/_headers) で付けています。
+名刺の Worker 設定は [`wrangler.card.jsonc`](./wrangler.card.jsonc) です。
+**あえて既定名（`wrangler.toml` / `.json` / `.jsonc`）にしていません。**
+本サイトの Pages プロジェクトが同じリポジトリルートをビルドしているため、
+既定名だと Pages 側がこの設定を拾ってしまう恐れがあるからです。
+そのため deploy 時は必ず `-c` で明示します。
+
+- `main` は不要（サーバーコードのない静的アセットのみの Worker）
+- `not_found_handling: "404-page"` で未マッチのパスに `404.html` を 404 で返す
+- カスタムドメインは `routes` の `custom_domain: true` でデプロイ時に自動設定
+
+静的ビルドでは endpoint のレスポンスヘッダが破棄されるため、`.vcf` の
+`Content-Type: text/vcard` は [`public-card/_headers`](./public-card/_headers) で付けています
+（Astro が `dist-card/_headers` にコピーし、Workers がアセット配信時に適用）。

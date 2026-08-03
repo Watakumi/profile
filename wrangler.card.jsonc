@@ -1,0 +1,32 @@
+// ============================================================
+// 名刺サイト（https://me.watakumi.page）を Cloudflare Workers に
+// 静的アセットとしてデプロイするための設定。
+//
+//   npm run build:card                          -> dist-card/ を生成
+//   npx wrangler deploy -c wrangler.card.jsonc  -> デプロイ
+//
+// ファイル名をあえて既定名（wrangler.toml / .json / .jsonc）にしていません。
+// 本サイトの Cloudflare Pages プロジェクトが同じリポジトリルートを
+// ビルドしているため、既定名だと Pages 側が誤ってこの設定を拾う恐れがあります。
+// 既定名でないので wrangler は自動検出せず、必ず -c で明示します。
+//
+// サーバーコード（main）は不要です。静的アセットのみの Worker です。
+// ============================================================
+{
+  "name": "watakumi-card",
+  "compatibility_date": "2026-08-03",
+
+  "assets": {
+    "directory": "./dist-card",
+    // 未マッチのパスは最寄りの 404.html を 404 ステータスで返す
+    // （既定は 404-page ではないので明示が必要）
+    "not_found_handling": "404-page"
+    // html_handling は既定の "auto-trailing-slash" のままで SSG に適切
+  },
+
+  // カスタムドメイン。watakumi.page ゾーンが同一アカウントにあるため、
+  // デプロイ時に DNS レコードと証明書が自動で用意されます。
+  // まず *.workers.dev だけで動作確認したい場合は、この routes を
+  // 一時的にコメントアウトしてデプロイしてください。
+  "routes": [{ "pattern": "me.watakumi.page", "custom_domain": true }]
+}
