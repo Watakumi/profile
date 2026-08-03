@@ -22,6 +22,8 @@ export default defineConfig({
   outDir: './dist-card',
   // .astro キャッシュを本サイトのビルドと分け、相互に無効化し合わないようにする
   cacheDir: './node_modules/.astro-card',
-  integrations: [sitemap()],
+  // OGP 画像の生成用ページは noindex なので sitemap からも外す
+  //（noindex のページを sitemap に載せると検索エンジンに矛盾したシグナルを送るため）
+  integrations: [sitemap({ filter: (page) => !page.includes('/ogp-preview') })],
   vite: { plugins: [tailwindcss()] },
 });

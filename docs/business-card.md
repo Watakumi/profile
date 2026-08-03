@@ -183,7 +183,38 @@ Astro の `.map()` 出力は **span 同士の間に空白テキストノード�
 
 ---
 
-## 6. フリップのアクセシビリティ設計
+## 6. OGP 画像
+
+URL を貼ったときに出る画像は名刺専用のものを用意しています（`public-card/ogp-card.png`、1200×630）。
+
+`satori` や `@vercel/og` といった画像生成ライブラリは入れず、
+**HTML を実寸でスクリーンショットする**方式にしています（外部依存を増やさない方針のため）。
+元ページは `src-card/pages/ogp-preview.astro` で、表示用ではないので `noindex`、
+かつ `astro.config.card.mjs` の `sitemap({ filter })` で sitemap からも除外しています
+（noindex のページを sitemap に載せると検索エンジンに矛盾したシグナルを送るため）。
+
+### 再生成手順
+
+```bash
+npm run build:card
+npx serve dist-card -l 4322
+
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --headless --disable-gpu --hide-scrollbars \
+  --window-size=1200,630 \
+  --screenshot=public-card/ogp-card.png \
+  http://localhost:4322/ogp-preview
+
+npm run build:card   # public-card/ を dist-card/ に反映
+```
+
+> **ヘッドレス Chrome は既定でライトモードです。**
+> `prefers-color-scheme: dark` 前提の配色に頼ると白背景に白文字で撮れてしまうため、
+> `ogp-preview.astro` は背景と `.og-sub` のグラデーションを自前で持ち、配色を自己完結させています。
+
+---
+
+## 7. フリップのアクセシビリティ設計
 
 **裏面にリンクがあるため、フリップのトリガでコンテンツを包むことはできません**
 （`<a>` を `<button>` に入れるのは不正で、リンクが機能しなくなる）。
@@ -206,7 +237,7 @@ Astro の `.map()` 出力は **span 同士の間に空白テキストノード�
 
 ---
 
-## 7. 検証
+## 8. 検証
 
 ```bash
 # 本サイトが無傷であること（最重要。head を前後で diff）
@@ -244,7 +275,7 @@ ls dist-card/_astro/*.js                                      # フリップ用J
 
 ---
 
-## 8. 未確認事項
+## 9. 未確認事項
 
 - **iOS Safari 実機での反転** — 3.1 の対策は入れてあるが、実機で裏面が鏡像で透けないかは未確認
 - **`npm audit` の既存脆弱性3件（high）** — `astro` / `esbuild` / `sharp` 由来。

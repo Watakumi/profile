@@ -6,8 +6,9 @@ import { links } from '../../src/data/profile';
 
 const description = `${card.name}（${card.role} / ${card.subrole}）のデジタル名刺。スキルと連絡先、連絡先データ(.vcf)をこの1枚に。`;
 
-// OGP 画像は本サイトのものを流用します（クロスオリジンでも各SNSは対応済み）。
-const ogImage = `${card.siteUrl}/ogp.png`;
+// 名刺専用の OGP 画像。src-card/pages/ogp-preview.astro を
+// ヘッドレス Chrome で 1200x630 撮影して生成しています（再生成手順はそのファイル冒頭）。
+const ogImage = `${card.cardUrl}/ogp-card.png`;
 
 // 2つのドメインが同一人物であることを検索エンジンに伝える
 const jsonLd = {

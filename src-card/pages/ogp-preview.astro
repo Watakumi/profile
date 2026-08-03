@@ -1,0 +1,167 @@
+---
+import Layout from '../../src/layouts/Layout.astro';
+import { card, cardSkillGroups } from '../../src/data/card';
+
+// ============================================================
+// OGP 画像（public-card/ogp-card.png）を書き出すための元ページ。
+// 表示用ではなく画像生成用なので noindex。
+//
+// 再生成するとき:
+//   npm run build:card
+//   npx serve dist-card -l 4322
+//   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+//     --headless --disable-gpu --hide-scrollbars \
+//     --window-size=1200,630 \
+//     --screenshot=public-card/ogp-card.png \
+//     http://localhost:4322/ogp-preview
+//   npm run build:card   # public-card/ を dist-card/ に反映
+//
+// satori 等の画像生成ライブラリを入れない代わりに、
+// 「HTML を実寸で撮る」方式にしています（外部依存を増やさない方針）。
+// ============================================================
+---
+
+<Layout
+  title='OGP preview'
+  description='OGP 画像生成用のページです。'
+  ogUrl={card.cardUrl}
+  jsonLd={null}
+  noindex
+>
+  <div class='og'>
+    <div class='og-left'>
+      <p class='og-eyebrow'>Digital Card</p>
+      <h1 class='og-name text-brand-flow'>{card.name}</h1>
+      <p class='og-role'>{card.role}</p>
+      <p class='og-sub'>{card.subrole}</p>
+
+      <ul class='og-skills'>
+        {
+          cardSkillGroups.map((g) => (
+            <li style={`--dot: ${g.color}`}>{g.items.slice(0, 3).join('   ')}</li>
+          ))
+        }
+      </ul>
+
+      <p class='og-url'>🌐 {card.cardUrl.replace('https://', '')}</p>
+    </div>
+
+    <div class='og-right'>
+      <div class='og-avatar'>
+        <img src={card.avatar} alt='' width='420' height='420' />
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* 1200x630 ちょうどで撮影する前提の固定レイアウト。
+     ヘッドレス Chrome は既定でライトモードなので、
+     prefers-color-scheme に依存せず配色を自己完結させる
+     （そうしないと白背景に白文字で撮れてしまう）。 */
+  .og {
+    width: 1200px;
+    height: 630px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 3rem;
+    padding: 4.5rem 5rem;
+    box-sizing: border-box;
+    overflow: hidden;
+    background:
+      radial-gradient(38% 42% at 12% 18%, rgb(124 58 237 / 0.4), transparent 60%),
+      radial-gradient(34% 38% at 88% 12%, rgb(3 201 136 / 0.34), transparent 60%),
+      radial-gradient(40% 44% at 78% 88%, rgb(28 130 173 / 0.32), transparent 60%),
+      radial-gradient(36% 40% at 20% 82%, rgb(236 72 153 / 0.28), transparent 60%),
+      #0c0a1f;
+  }
+
+  .og-eyebrow {
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.5);
+  }
+
+  .og-name {
+    font-size: 6.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-top: 0.75rem;
+  }
+
+  .og-role {
+    font-size: 2.1rem;
+    font-weight: 800;
+    margin-top: 1.1rem;
+    color: #fff;
+  }
+
+  /* .text-brand-gradient はライトモードだと濃紺始まりで暗背景に沈むため、
+     ここでは暗所用の明るいグラデーションを直接指定する */
+  .og-sub {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-top: 0.3rem;
+    background-image: linear-gradient(100deg, #a78bfa, #38bdf8 45%, #34d399 90%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .og-skills {
+    list-style: none;
+    margin: 1.9rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .og-skills li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: rgb(255 255 255 / 0.78);
+    white-space: pre;
+  }
+  .og-skills li::before {
+    content: '';
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 9999px;
+    background: var(--dot);
+    flex: none;
+  }
+
+  .og-url {
+    margin-top: 2.1rem;
+    display: inline-block;
+    border-radius: 9999px;
+    border: 1px solid rgb(255 255 255 / 0.22);
+    background: rgb(255 255 255 / 0.08);
+    padding: 0.55rem 1.4rem;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: rgb(255 255 255 / 0.85);
+  }
+
+  .og-avatar {
+    width: 26rem;
+    height: 26rem;
+    border-radius: 9999px;
+    padding: 10px;
+    background: linear-gradient(135deg, #7c3aed, #1c82ad, #03c988);
+    box-shadow: 0 30px 60px rgb(12 10 31 / 0.45);
+  }
+  .og-avatar img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 9999px;
+    background: #fff;
+    object-fit: contain;
+  }
+</style>
