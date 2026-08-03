@@ -1,0 +1,29 @@
+---
+import Layout from '../../src/layouts/Layout.astro';
+import { card } from '../../src/data/card';
+---
+
+<Layout
+  title='404 - ページが見つかりません'
+  description='お探しのページは見つかりませんでした。'
+  ogUrl={card.cardUrl}
+  ogImage={`${card.siteUrl}/ogp.png`}
+  jsonLd={null}
+  noindex
+>
+  <main class='grid min-h-[100dvh] place-items-center px-6 text-center'>
+    <div class='rise'>
+      <p class='text-8xl font-black text-brand-flow sm:text-9xl'>404</p>
+      <p class='mt-2 text-2xl font-extrabold'>ページが見つかりません 🧭</p>
+      <p class='mt-3 text-ink/60 dark:text-white/60'>
+        このドメインには名刺しか置いていません。
+      </p>
+      <a
+        href='/'
+        class='mt-8 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[#7c3aed] via-[#1c82ad] to-[#03c988] px-6 py-3 font-bold text-white shadow-lg transition-transform hover:-translate-y-0.5'
+      >
+        ← 名刺に戻る
+      </a>
+    </div>
+  </main>
+</Layout>

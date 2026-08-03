@@ -1,0 +1,183 @@
+---
+import '../styles/card.css';
+import { card, cardSkills, cardIconLinks } from '../../src/data/card';
+import { iconPaths } from '../../src/data/icons';
+import QrCode from './QrCode.astro';
+
+// 裏面にリンクがあるため、フリップのトリガでコンテンツを包むことはできません
+// （<a> を <button> に入れるのは不正で、リンクが機能しなくなる）。
+// 代わりに各面へ「透明な全面ボタン」を敷き、裏面の操作要素だけ
+// pointer-events を戻しています（card.css を参照）。
+---
+
+<div class='card-scene'>
+  <div class='card' id='business-card' data-flipped='false'>
+    <!-- ============ 表面 ============ -->
+    <section class='card-face card-face--front' aria-label='名刺の表面'>
+      <div class='card-avatar bob'>
+        <img src={card.avatar} alt='' width='176' height='176' />
+      </div>
+
+      <h1 class='card-name text-brand-flow' style='margin-top: 0.9rem'>{card.name}</h1>
+      <p class='card-role' style='margin-top: 0.35rem'>{card.role}</p>
+      <p class='card-sub text-brand-gradient' style='margin-top: 0.15rem'>{card.subrole}</p>
+      <p class='card-tagline' style='margin-top: 0.6rem'>{card.tagline}</p>
+
+      <p class='card-site'>🌐 {card.siteLabel}</p>
+
+      <button
+        type='button'
+        class='flip-hit'
+        data-flip
+        aria-controls='business-card'
+        aria-expanded='false'
+      >
+        <span class='sr-only'>裏面（スキル・連絡先・QRコード）を表示する</span>
+        <span class='flip-hint' aria-hidden='true'>タップで裏面 ⤾</span>
+      </button>
+    </section>
+
+    <!-- ============ 裏面 ============ -->
+    <section class='card-face card-face--back' aria-label='名刺の裏面' inert>
+      <p class='card-eyebrow'>Skills</p>
+
+      <ul class='chip-list' style='margin-top: 0.5rem'>
+        {
+          cardSkills.map((skill) => (
+            <li class='chip' style={`--dot: ${skill.color}`}>
+              {skill.name}
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class='card-specialty' style='margin-top: 0.7rem'>{card.specialty}</p>
+
+      <div class='card-divider' style='margin: 0.9rem 0'></div>
+
+      <p class='card-eyebrow'>Contact</p>
+
+      <div
+        style='margin-top: 0.6rem; display: flex; align-items: center; gap: 0.9rem; justify-content: space-between'
+      >
+        <div style='display: flex; flex-direction: column; gap: 0.6rem; align-items: flex-start'>
+          <div style='display: flex; gap: 0.5rem'>
+            {
+              cardIconLinks.map((link) => (
+                <a
+                  class='icon-btn'
+                  href={link.src}
+                  aria-label={link.name}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  <svg viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
+                    <path d={iconPaths[link.name] ?? iconPaths.GitHub} />
+                  </svg>
+                </a>
+              ))
+            }
+          </div>
+
+          <a class='vcard-btn' href={card.vcardPath} download={card.vcardFileName} type='text/vcard'>
+            <svg viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
+              <path d={iconPaths.Download} />
+            </svg>
+            連絡先を保存
+          </a>
+        </div>
+
+        <div style='display: flex; flex-direction: column; align-items: center; gap: 0.3rem'>
+          <QrCode />
+          <span class='qr-caption'>この名刺</span>
+        </div>
+      </div>
+
+      <div
+        style='margin-top: 0.9rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem'
+      >
+        <button type='button' class='flip-back' data-flip>← 表に戻す</button>
+        <a
+          class='card-site'
+          href={card.siteUrl}
+          target='_blank'
+          rel='noopener noreferrer'
+          style='pointer-events: auto'
+        >
+          🌐 {card.siteLabel}
+        </a>
+      </div>
+
+      <button
+        type='button'
+        class='flip-hit'
+        data-flip
+        aria-controls='business-card'
+        aria-expanded='true'
+      >
+        <span class='sr-only'>表面に戻す</span>
+      </button>
+    </section>
+  </div>
+
+  <noscript>
+    <!-- JS 無効時は裏面の情報を素のリンク集として提供する -->
+    <ul class='card-noscript'>
+      {
+        cardIconLinks.map((link) => (
+          <li>
+            <a href={link.src} target='_blank' rel='noopener noreferrer'>
+              {link.name}
+            </a>
+          </li>
+        ))
+      }
+      <li><a href={card.siteUrl}>{card.siteLabel}</a></li>
+      <li><a href={card.vcardPath} download={card.vcardFileName}>連絡先を保存 (.vcf)</a></li>
+    </ul>
+  </noscript>
+</div>
+
+<script>
+  const cardEl = document.getElementById('business-card');
+
+  if (cardEl) {
+    const front = cardEl.querySelector<HTMLElement>('.card-face--front')!;
+    const back = cardEl.querySelector<HTMLElement>('.card-face--back')!;
+
+    const apply = (flipped: boolean) => {
+      cardEl.dataset.flipped = String(flipped);
+      // 隠れる面はフォーカスもスクリーンリーダーも到達不可にする
+      front.inert = flipped;
+      back.inert = !flipped;
+      cardEl
+        .querySelectorAll('[data-flip]')
+        .forEach((b) => b.setAttribute('aria-expanded', String(flipped)));
+    };
+
+    apply(false);
+
+    cardEl.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement | null;
+      if (!target?.closest('[data-flip]')) return;
+
+      // キーボード起動（Enter / Space）の click は detail === 0
+      const viaKeyboard = (e as MouseEvent).detail === 0;
+      const next = cardEl.dataset.flipped !== 'true';
+      apply(next);
+
+      if (viaKeyboard) {
+        requestAnimationFrame(() => {
+          (next ? back : front).querySelector<HTMLElement>('[data-flip]')?.focus();
+        });
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && cardEl.dataset.flipped === 'true') {
+        apply(false);
+        front.querySelector<HTMLElement>('[data-flip]')?.focus();
+      }
+    });
+  }
+</script>

@@ -1,0 +1,36 @@
+---
+import Layout from '../../src/layouts/Layout.astro';
+import BusinessCard from '../components/BusinessCard.astro';
+import { card } from '../../src/data/card';
+import { links } from '../../src/data/profile';
+
+const description = `${card.name}（${card.role} / ${card.subrole}）のデジタル名刺。スキルと連絡先、連絡先データ(.vcf)をこの1枚に。`;
+
+// OGP 画像は本サイトのものを流用します（クロスオリジンでも各SNSは対応済み）。
+const ogImage = `${card.siteUrl}/ogp.png`;
+
+// 2つのドメインが同一人物であることを検索エンジンに伝える
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: card.name,
+  url: card.cardUrl,
+  jobTitle: card.role,
+  image: `${card.cardUrl}/avatar.png`,
+  description: card.specialty,
+  sameAs: [card.siteUrl, ...links.map((l) => l.src)],
+};
+---
+
+<Layout
+  title={`${card.name} | Digital Card`}
+  description={description}
+  ogTitle={`${card.name} — ${card.role}`}
+  ogUrl={card.cardUrl}
+  ogImage={ogImage}
+  jsonLd={jsonLd}
+>
+  <main>
+    <BusinessCard />
+  </main>
+</Layout>

@@ -1,0 +1,26 @@
+---
+import QRCode from 'qrcode';
+import { card } from '../../src/data/card';
+
+// ビルド時に SVG 文字列を生成してインライン化します（クライアントJSはゼロ）。
+// margin: 0 にして、クワイエットゾーンは .qr-frame の padding で確保します。
+const raw = await QRCode.toString(card.cardUrl, {
+  type: 'svg',
+  errorCorrectionLevel: 'M',
+  margin: 0,
+  color: {
+    dark: '#14103a', // --color-ink
+    light: '#0000', // 透過（枠の白を活かす）
+  },
+});
+
+// width/height 属性を外して CSS でサイズを制御できるようにする
+const svg = raw
+  .replace(/<\?xml[\s\S]*?\?>/, '')
+  .replace(/ (width|height)="[^"]*"/g, '')
+  .replace('<svg ', '<svg role="img" aria-label="この名刺ページのQRコード" ');
+---
+
+<div class='qr-frame'>
+  <Fragment set:html={svg} />
+</div>

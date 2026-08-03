@@ -5,24 +5,45 @@ import { profile, links } from '../data/profile';
 export interface Props {
   title: string;
   description?: string;
+  /** OGP のタイトル（既定: 'Watakumi Page'） */
+  ogTitle?: string;
+  /** OGP の絶対URL（既定: site のオリジン） */
+  ogUrl?: string;
+  /** OGP 画像の絶対URL（既定: <site>/ogp.png） */
+  ogImage?: string;
+  /** JSON-LD を差し替える。null を渡すと出力しない */
+  jsonLd?: Record<string, unknown> | null;
+  /** <body> に付けるクラス */
+  bodyClass?: string;
+  /** 検索エンジンから除外する */
+  noindex?: boolean;
 }
+
+// Astro.site はビルド設定ごとに変わるため、ここを起点にすれば
+// 本サイト（watakumi.page）でも名刺（me.watakumi.page）でも正しい値になる。
+// なお new URL('https://watakumi.page').origin は末尾スラッシュを持たない。
+const siteOrigin = Astro.site ? Astro.site.origin : 'https://watakumi.page';
 
 const {
   title,
   description = 'Watakumi のプロフィールページ。ブラウザで完結する小さくて楽しい個人アプリを量産中。',
+  ogTitle = 'Watakumi Page',
+  ogUrl = siteOrigin,
+  ogImage = `${siteOrigin}/ogp.png`,
+  bodyClass,
+  noindex = false,
+  jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: profile.name,
+    url: 'https://watakumi.page',
+    jobTitle: profile.role,
+    image: 'https://watakumi.page/avatar.png',
+    sameAs: links.map((l) => l.src),
+  },
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: profile.name,
-  url: 'https://watakumi.page',
-  jobTitle: profile.role,
-  image: 'https://watakumi.page/avatar.png',
-  sameAs: links.map((l) => l.src),
-};
 ---
 
 <!doctype html>
@@ -38,17 +59,18 @@ const jsonLd = {
     <link rel='canonical' href={canonical} />
     <title>{title}</title>
     <meta property='og:type' content='website' />
-    <meta property='og:title' content='Watakumi Page' />
+    <meta property='og:title' content={ogTitle} />
     <meta property='og:description' content={description} />
-    <meta property='og:url' content='https://watakumi.page' />
-    <meta property='og:image' content='https://watakumi.page/ogp.png' />
+    <meta property='og:url' content={ogUrl} />
+    <meta property='og:image' content={ogImage} />
     <meta property='og:image:width' content='1200' />
     <meta property='og:image:height' content='630' />
     <meta name='twitter:card' content='summary_large_image' />
-    <meta name='twitter:image' content='https://watakumi.page/ogp.png' />
-    <script type='application/ld+json' set:html={JSON.stringify(jsonLd)} />
+    <meta name='twitter:image' content={ogImage} />
+    {noindex && <meta name='robots' content='noindex' />}
+    {jsonLd && <script type='application/ld+json' set:html={JSON.stringify(jsonLd)} />}
   </head>
-  <body>
+  <body class={bodyClass}>
     <slot />
   </body>
 </html>

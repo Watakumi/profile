@@ -1,0 +1,6 @@
+# Cloudflare Pages のレスポンスヘッダ設定。
+# Astro の静的ビルドでは endpoint が返した Response のヘッダが破棄されるため、
+# .vcf の Content-Type はここで付ける必要があります。
+/watakumi.vcf
+  Content-Type: text/vcard; charset=utf-8
+  Cache-Control: public, max-age=3600
