@@ -154,6 +154,13 @@
   font-size: clamp(1.75rem, 8vw, 2.25rem);
   font-weight: 800;
   line-height: 1.1;
+  /* 白いアバターに重なっても読めるよう縁を付ける（global.css の .text-legible 相当）。
+     ただし text-shadow は使えない: text-brand-flow は文字色を透明にして
+     背景を切り抜くため、影が glyph を透けて濁る。
+     drop-shadow は「描画された結果のアルファ」に効くので、
+     グラデーションを保ったまま輪郭にだけ影が乗る。
+     暗い背景側では影が見えないので、本サイトと同じく悪影響はない。 */
+  filter: drop-shadow(0 1px 2px rgb(12 10 31 / 0.55)) drop-shadow(0 0 1px rgb(12 10 31 / 0.55));
 }
 .card-role {
   font-size: 0.95rem;
