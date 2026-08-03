@@ -4,7 +4,9 @@ import BusinessCard from '../components/BusinessCard.astro';
 import { card } from '../../src/data/card';
 import { links } from '../../src/data/profile';
 
-const description = `${card.name}（${card.role} / ${card.subrole}）のデジタル名刺。スキルと連絡先、連絡先データ(.vcf)をこの1枚に。`;
+// 名前・肩書き・スキルは OGP 画像側に出ているので、説明文では繰り返さない。
+// 画像が伝えられないこと（めくれる・連絡先に追加できる）だけを書く。
+const description = 'めくるとスキルと連絡先。そのまま端末に追加できます。';
 
 // 名刺専用の OGP 画像。src-card/pages/ogp-preview.astro を
 // ヘッドレス Chrome で 1200x630 撮影して生成しています（再生成手順はそのファイル冒頭）。
@@ -26,7 +28,7 @@ const jsonLd = {
 <Layout
   title={`${card.name} | Digital Card`}
   description={description}
-  ogTitle={`${card.name} — ${card.role}`}
+  ogTitle={`${card.name} | Digital Card`}
   ogUrl={card.cardUrl}
   ogImage={ogImage}
   jsonLd={jsonLd}
