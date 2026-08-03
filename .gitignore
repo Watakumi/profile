@@ -2,4 +2,4 @@
 /dist
 /dist-card
 /.astro
-.DS_Store
+.DS_Store/.wrangler
