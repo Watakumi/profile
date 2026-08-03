@@ -1,6 +1,6 @@
 ---
 import '../styles/card.css';
-import { card, cardSkills, cardIconLinks } from '../../src/data/card';
+import { card, cardSkillGroups, cardIconLinks } from '../../src/data/card';
 import { iconPaths } from '../../src/data/icons';
 import QrCode from './QrCode.astro';
 
@@ -14,12 +14,19 @@ import QrCode from './QrCode.astro';
   <div class='card' id='business-card' data-flipped='false'>
     <!-- ============ 表面 ============ -->
     <section class='card-face card-face--front' aria-label='名刺の表面'>
-      <div class='card-avatar bob'>
-        <img src={card.avatar} alt='' width='176' height='176' />
+      {/* 角丸からはみ出したアバターを切り抜くための専用ラッパー。
+          overflow は 3D を平坦化する grouping property なので、
+          .card-face 本体ではなくこの中間要素に載せる。 */}
+      <div class='card-bleed' aria-hidden='true'>
+        <div class='card-avatar bob'>
+          <img src={card.avatar} alt='' width='288' height='288' draggable='false' />
+        </div>
       </div>
 
-      <h1 class='card-name text-brand-flow' style='margin-top: 0.9rem'>{card.name}</h1>
-      <p class='card-role' style='margin-top: 0.35rem'>{card.role}</p>
+      {/* text-legible（暗い影）は文字色が透明な text-brand-flow と併用しないこと。
+          影が透けて濁るため。本サイトの Hero でも別々の span に分けている。 */}
+      <h1 class='card-name text-brand-flow'>{card.name}</h1>
+      <p class='card-role text-legible' style='margin-top: 0.35rem'>{card.role}</p>
       <p class='card-sub text-brand-gradient' style='margin-top: 0.15rem'>{card.subrole}</p>
       <p class='card-tagline' style='margin-top: 0.6rem'>{card.tagline}</p>
 
@@ -41,15 +48,22 @@ import QrCode from './QrCode.astro';
     <section class='card-face card-face--back' aria-label='名刺の裏面' inert>
       <p class='card-eyebrow'>Skills</p>
 
-      <ul class='chip-list' style='margin-top: 0.5rem'>
+      <dl class='skill-list'>
         {
-          cardSkills.map((skill) => (
-            <li class='chip' style={`--dot: ${skill.color}`}>
-              {skill.name}
-            </li>
+          cardSkillGroups.map((group) => (
+            <>
+              <dt class='skill-label' style={`--dot: ${group.color}`}>
+                {group.label}
+              </dt>
+              <dd class='skill-items'>
+                {group.items.map((item) => (
+                  <span class='skill-item'>{item}</span>
+                ))}
+              </dd>
+            </>
           ))
         }
-      </ul>
+      </dl>
 
       <p class='card-specialty' style='margin-top: 0.7rem'>{card.specialty}</p>
 

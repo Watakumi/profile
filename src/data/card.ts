@@ -33,25 +33,33 @@ export const card = {
   vcardFileName: 'watakumi.vcf',
 };
 
-export type CardSkill = {
-  name: string;
-  /** チップのドット色。profile.ts の skillGroups の色をそのまま使う */
+export type CardSkillGroup = {
+  label: string;
+  /** ラベル頭のドット色。profile.ts の skillGroups の色をそのまま使う */
   color: string;
+  items: string[];
 };
 
-// 本サイトの skillGroups（25項目）→ 名刺の裏に収まる 8 チップへ凝縮。
-// 自明なもの（JavaScript / SQL / HTML・CSS / zod）は省き、
-// 近いものは併記に畳み、ツール層は落としています。
-// 色: Languages #e11d48 / Frameworks #06b6d4 / Infra & Tools #8b5cf6
-export const cardSkills: CardSkill[] = [
-  { name: 'TypeScript', color: '#e11d48' },
-  { name: 'Ruby', color: '#e11d48' },
-  { name: 'Python', color: '#e11d48' },
-  { name: 'Rails・NestJS', color: '#06b6d4' },
-  { name: 'React・Next.js', color: '#06b6d4' },
-  { name: 'LangGraph・AI Agents', color: '#06b6d4' },
-  { name: 'GCP・Cloudflare', color: '#8b5cf6' },
-  { name: 'Terraform・Docker', color: '#8b5cf6' },
+// 本サイトの skillGroups（25項目）→ 名刺の裏に収まる分量へ凝縮。
+// 自明なもの（JavaScript / SQL / HTML・CSS / zod）とツール層は省いています。
+// チップを並べるだけだとドットの色が何を指すのか伝わらないため、
+// カテゴリ名を左に出して「ラベル自体が凡例になる」形にしています。
+export const cardSkillGroups: CardSkillGroup[] = [
+  {
+    label: 'Languages',
+    color: '#e11d48',
+    items: ['TypeScript', 'Ruby', 'Python'],
+  },
+  {
+    label: 'Frameworks',
+    color: '#06b6d4',
+    items: ['Rails', 'NestJS', 'React', 'Next.js', 'LangGraph'],
+  },
+  {
+    label: 'Infra',
+    color: '#8b5cf6',
+    items: ['GCP', 'Cloudflare', 'Terraform', 'Docker'],
+  },
 ];
 
 /** 裏面のアイコンリンク（profile.ts の links をそのまま流用） */

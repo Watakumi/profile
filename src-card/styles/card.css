@@ -57,6 +57,8 @@
 /* 高さは「背の高い方の面」に揃うため、表面には余白が生まれます。
    サイト名を下端（ヒント文の上）へ寄せて間延びを防ぎます。 */
 .card-face--front {
+  /* アバターの下半分に見出しが重なる位置まで押し下げる（本サイトの Hero と同じ） */
+  padding-top: clamp(5.5rem, 26vw, 6.75rem);
   padding-bottom: 2.75rem; /* 絶対配置の .flip-hint と重ならないように */
 }
 .card-face--front .card-site {
@@ -87,8 +89,9 @@
   outline-offset: 3px;
 }
 
-/* コンテンツはボタンより手前に置きつつ、クリックはボタンへ通す */
-.card-face > *:not(.flip-hit) {
+/* コンテンツはボタンより手前に置きつつ、クリックはボタンへ通す
+   （.card-bleed は自前で absolute 配置するので対象外） */
+.card-face > *:not(.flip-hit):not(.card-bleed) {
   position: relative;
   z-index: 1;
   pointer-events: none;
@@ -112,13 +115,31 @@
 }
 
 /* ---- 表面 ---- */
+/* 角丸をはみ出したアバターを切り抜く層。
+   overflow は 3D を平坦化するため .card-face には付けられないので、
+   inset:0 のこのラッパーに載せて face の backface-visibility を守る。 */
+.card-bleed {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* 右上に大きめのアバター。円が欠けないようカード内側に収める。
+   見出しが手前に重なり、アバターが文字の下にもぐり込む
+   （.card-name 側が z-index: 1、こちらは .card-bleed の z-index: 0）。 */
 .card-avatar {
-  width: 5.5rem;
-  height: 5.5rem;
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  width: clamp(7.5rem, 38vw, 9.5rem);
+  height: clamp(7.5rem, 38vw, 9.5rem);
   border-radius: 9999px;
-  padding: 3px;
+  padding: 4px;
   background: linear-gradient(135deg, #7c3aed, #1c82ad, #03c988);
-  box-shadow: 0 10px 20px rgb(12 10 31 / 0.22);
+  box-shadow: 0 14px 28px rgb(12 10 31 / 0.3);
 }
 .card-avatar img {
   display: block;
@@ -162,35 +183,56 @@
   color: rgb(20 16 58 / 0.45);
 }
 
-.chip-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* カテゴリラベル（左）＋ スキル列（右）の2カラム。
+   親を1つの grid にすることで、3行すべてのラベル幅が自動で揃います。
+   チップを並べるだけだとドットの色が何の意味か伝わらないので、
+   ラベル自体を凡例として見せる形にしています。 */
+.skill-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.7rem;
+  row-gap: 0.4rem;
+  margin: 0.55rem 0 0;
+  /* 右が2行に折り返してもラベルは1行目に揃える（上下中央だと視線の起点がぶれる） */
+  align-items: baseline;
 }
-.chip {
+.skill-label {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  border-radius: 9999px;
-  border: 1px solid rgb(255 255 255 / 0.8);
-  background: rgb(255 255 255 / 0.75);
-  padding: 0.25rem 0.55rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  line-height: 1.3;
-  box-shadow: 0 1px 2px rgb(20 16 58 / 0.06);
+  gap: 0.35rem;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgb(20 16 58 / 0.5);
 }
-/* グループ色のドット（本サイトの Language.astro と同じ考え方） */
-.chip::before {
+.skill-label::before {
   content: '';
   width: 0.4rem;
   height: 0.4rem;
   border-radius: 9999px;
   background: var(--dot, #7c3aed);
   flex: none;
+}
+/* flex にするのが必須。インライン要素は空白でしか改行できず、
+   Astro の .map() 出力は span 間に空白を作らないため、
+   インラインのままだと1行に繋がったまま折り返せず、
+   カード幅を突き破って横にはみ出す。 */
+.skill-items {
+  margin: 0; /* dd の既定インデントを消す */
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.7rem;
+  row-gap: 0.1rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+/* 区切り記号は置かず間隔で切る。記号を入れると折り返した行の
+   先頭や末尾に区切りだけが取り残されるため。 */
+.skill-item {
+  white-space: nowrap;
 }
 
 .card-specialty {
@@ -361,9 +403,11 @@
   .card-specialty {
     color: rgb(255 255 255 / 0.62);
   }
-  .chip {
-    border-color: rgb(255 255 255 / 0.12);
-    background: rgb(255 255 255 / 0.1);
+  .skill-label {
+    color: rgb(255 255 255 / 0.5);
+  }
+  .skill-item + .skill-item::before {
+    color: rgb(255 255 255 / 0.32);
   }
   .card-divider {
     background: linear-gradient(
